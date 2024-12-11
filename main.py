@@ -1,7 +1,7 @@
 '''
 Created on Nov 14, 2013
 
-@author: davon
+@author: Deuvarney
 '''
 import pygame, random
 from pygame.locals import *
@@ -47,7 +47,7 @@ class Card:
         else:
             self.suit = None
             self.rank = None
-            print "Invalid card: ", suit, rank
+            print("Invalid card: ", suit, rank)
 
     def __str__(self):
         return self.suit + self.rank
@@ -186,9 +186,9 @@ def deal():
     playing_deck = Deck()
     player_hand = Hand()
     oppo_hand = Hand()
-    print playing_deck
+    print(playing_deck)
     playing_deck.shuffle()
-    print playing_deck
+    print(playing_deck)
     outcome = ""    
     
     player_hand.add_card(playing_deck.deal_card())
@@ -201,10 +201,10 @@ def deal():
         stand()
         
            
-    print "Player hand",player_hand, player_hand.get_value() 
+    print("Player hand",player_hand, player_hand.get_value())
     #oppo_hand.add_card(playing_deck.deal_card())
     #oppo_hand.add_card(playing_deck.deal_card())
-    print "Opponent Hand", oppo_hand, oppo_hand.get_value()
+    print("Opponent Hand", oppo_hand, oppo_hand.get_value())
 
 '''      
 def hit():
@@ -229,7 +229,7 @@ def hit():
         # replace with your code below
     if (in_play ==True):    
         player_hand.add_card(playing_deck.deal_card())
-        print "Player" + str(player_hand.get_value())
+        print("Player" + str(player_hand.get_value()))
         
         if (player_hand.get_value() > 21):
             outcome = "You've busted"
@@ -381,16 +381,16 @@ while True:
             pl = pygame.mouse.get_pos()
             #Deal Button
             if (pl[0] >= deal_pos[0] and pl[0] <= deal_pos[0] + rect_end_pos[0]) and (pl[1] >= deal_pos[1] and pl[1] <= deal_pos[1] + rect_end_pos[1]):
-                print "Deal Button pressed"
+                print("Deal Button pressed")
                 deal()
             #Hit Button
             elif (pl[0] >= hit_pos[0] and pl[0] <= hit_pos[0] + rect_end_pos[0]) and (pl[1] >= hit_pos[1] and pl[1] <= hit_pos[1] + rect_end_pos[1]):
                 hit()    
-                print "Hit Button pressed" 
+                print("Hit Button pressed")
             #Stand Button      
             elif  (pl[0] >= stand_pos[0] and pl[0] <= stand_pos[0] + rect_end_pos[0]) and (pl[1] >= stand_pos[1] and pl[1] <= stand_pos[1] + rect_end_pos[1]):              
                 stand()
-                print "Stand Button pressed"
+                print("Stand Button pressed")
                 
     mouse_pos_x, mouse_pos_y = pygame.mouse.get_pos() #Getting mouse position for button color change and movement when mouse over
     #Deal Button 
