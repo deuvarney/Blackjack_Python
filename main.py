@@ -6,6 +6,7 @@ Created on Nov 14, 2013
 import pygame, random
 from pygame.locals import *
 from sys import exit
+import asyncio
 
 pygame.init()
 
@@ -371,93 +372,102 @@ button_blue = (0,0,200)
 color_gray = (150, 150, 150)
 dark_gray = (100,100,100)
 
-while True:
-    
-    #player_hand.draw([100, 400])
-    for event in pygame.event.get():
-        if event.type == QUIT:
-            exit()
-        if event.type == MOUSEBUTTONUP:
-            pl = pygame.mouse.get_pos()
-            #Deal Button
-            if (pl[0] >= deal_pos[0] and pl[0] <= deal_pos[0] + rect_end_pos[0]) and (pl[1] >= deal_pos[1] and pl[1] <= deal_pos[1] + rect_end_pos[1]):
-                print("Deal Button pressed")
-                deal()
-            #Hit Button
-            elif (pl[0] >= hit_pos[0] and pl[0] <= hit_pos[0] + rect_end_pos[0]) and (pl[1] >= hit_pos[1] and pl[1] <= hit_pos[1] + rect_end_pos[1]):
-                hit()    
-                print("Hit Button pressed")
-            #Stand Button      
-            elif  (pl[0] >= stand_pos[0] and pl[0] <= stand_pos[0] + rect_end_pos[0]) and (pl[1] >= stand_pos[1] and pl[1] <= stand_pos[1] + rect_end_pos[1]):              
-                stand()
-                print("Stand Button pressed")
-                
-    mouse_pos_x, mouse_pos_y = pygame.mouse.get_pos() #Getting mouse position for button color change and movement when mouse over
-    #Deal Button 
-    
-    if (mouse_pos_x >= deal_pos[0] and mouse_pos_x <= deal_pos[0] + rect_end_pos[0]) and (mouse_pos_y >= deal_pos[1] and mouse_pos_y  <= deal_pos[1] + rect_end_pos[1]):
-        button_blue = color_gray
-        deal_pos = deal_pos_over
-        sound_control(1)
-        #mouse_over_sound.play(0)
-    else:
-        button_blue = (0,0,200)
-        deal_pos = (100,445)
-        sound_control(0)   
-    #Hit button
-    if in_play:
-        if (mouse_pos_x >= hit_pos[0] and mouse_pos_x <= hit_pos[0] + rect_end_pos[0]) and (mouse_pos_y >= hit_pos[1] and mouse_pos_y <= hit_pos[1] + rect_end_pos[1]):
-            button_red = color_gray
-            hit_pos = hit_pos_over
-            sound_control2(1)
-            #mouse_over_sound.play()
+async def main():
+    global button_blue, button_yellow, button_red
+    global deal_pos, hit_pos, stand_pos, rect_end_pos
+
+    while True:
+        
+        #player_hand.draw([100, 400])
+        for event in pygame.event.get():
+            if event.type == QUIT:
+                exit()
+            if event.type == MOUSEBUTTONUP:
+                pl = pygame.mouse.get_pos()
+                #Deal Button
+                if (pl[0] >= deal_pos[0] and pl[0] <= deal_pos[0] + rect_end_pos[0]) and (pl[1] >= deal_pos[1] and pl[1] <= deal_pos[1] + rect_end_pos[1]):
+                    print("Deal Button pressed")
+                    deal()
+                #Hit Button
+                elif (pl[0] >= hit_pos[0] and pl[0] <= hit_pos[0] + rect_end_pos[0]) and (pl[1] >= hit_pos[1] and pl[1] <= hit_pos[1] + rect_end_pos[1]):
+                    hit()    
+                    print("Hit Button pressed")
+                #Stand Button      
+                elif  (pl[0] >= stand_pos[0] and pl[0] <= stand_pos[0] + rect_end_pos[0]) and (pl[1] >= stand_pos[1] and pl[1] <= stand_pos[1] + rect_end_pos[1]):              
+                    stand()
+                    print("Stand Button pressed")
+                    
+        mouse_pos_x, mouse_pos_y = pygame.mouse.get_pos() #Getting mouse position for button color change and movement when mouse over
+        #Deal Button 
+        
+        if (mouse_pos_x >= deal_pos[0] and mouse_pos_x <= deal_pos[0] + rect_end_pos[0]) and (mouse_pos_y >= deal_pos[1] and mouse_pos_y  <= deal_pos[1] + rect_end_pos[1]):
+            button_blue = color_gray
+            deal_pos = deal_pos_over
+            sound_control(1)
+            #mouse_over_sound.play(0)
         else:
-            button_red = (200, 0, 0)
+            button_blue = (0,0,200)
+            deal_pos = (100,445)
+            sound_control(0)   
+        #Hit button
+        if in_play:
+            if (mouse_pos_x >= hit_pos[0] and mouse_pos_x <= hit_pos[0] + rect_end_pos[0]) and (mouse_pos_y >= hit_pos[1] and mouse_pos_y <= hit_pos[1] + rect_end_pos[1]):
+                button_red = color_gray
+                hit_pos = hit_pos_over
+                sound_control2(1)
+                #mouse_over_sound.play()
+            else:
+                button_red = (200, 0, 0)
+                hit_pos = (250, 445)
+                sound_control2(0)
+        #Stand button
+
+            if (mouse_pos_x >= stand_pos[0] and mouse_pos_x <= stand_pos[0] + rect_end_pos[0]) and (mouse_pos_y >= stand_pos[1] and mouse_pos_y <= stand_pos[1] + rect_end_pos[1]):
+                button_yellow = color_gray
+                stand_pos = stand_pos_over
+                sound_control3(1)
+                #mouse_over_sound.play()
+            else:
+                button_yellow = (200, 200, 0)
+                stand_pos = (400, 445)
+                sound_control3(0)
+        else:
+            button_red = dark_gray
             hit_pos = (250, 445)
             sound_control2(0)
-    #Stand button
-
-        if (mouse_pos_x >= stand_pos[0] and mouse_pos_x <= stand_pos[0] + rect_end_pos[0]) and (mouse_pos_y >= stand_pos[1] and mouse_pos_y <= stand_pos[1] + rect_end_pos[1]):
-            button_yellow = color_gray
-            stand_pos = stand_pos_over
-            sound_control3(1)
-            #mouse_over_sound.play()
-        else:
-            button_yellow = (200, 200, 0)
+            button_yellow = dark_gray
             stand_pos = (400, 445)
             sound_control3(0)
-    else:
-        button_red = dark_gray
-        hit_pos = (250, 445)
-        sound_control2(0)
-        button_yellow = dark_gray
-        stand_pos = (400, 445)
-        sound_control3(0)
-    
-     
-    
-    #Draw objects to the frame                        
-    frame.fill((0,200,0))    
-    frame.blit(card_backs, (400,185))     
-    #frame.blit(card_images, (200, 200), (CARD_SIZE[0]*12, CARD_SIZE[1]*0, 73, 98))
-    
-    deal_button = pygame.draw.rect(frame, button_blue, Rect((deal_pos),rect_end_pos))
-    hit_button = pygame.draw.rect(frame, button_red, Rect(hit_pos,rect_end_pos))
-    stand_button = pygame.draw.rect(frame, button_yellow, Rect(stand_pos, rect_end_pos))
-    
-    #Draw hands
-    player_hand.draw([50, 300])# test to make sure that card.draw works, replace with your code below    
-    oppo_hand.draw([50, 65])
-    
-    #Draw fonts
-    frame.blit(outcome_text.render(outcome, True, color),(175,225))
-    frame.blit(hand_count_text.render("Player Hand Count: " + str(player_hand.get_value()), True, (0,0,250)),(125,420))
-    frame.blit(hand_count_text.render("Computer Hand Count: " + str(oppo_hand.get_value()), True, (0,0,250)),(125,25))
-    
-    frame.blit(hand_count_text.render("Deal", True, (255,255,255)), (deal_pos[0] + 15, deal_pos[1] + 15) )
-    frame.blit(hand_count_text.render("Hit", True, (255,255,255)), (hit_pos[0] + 15, hit_pos[1] + 15) )
-    frame.blit(hand_count_text.render("Stand", True, (255,255,255)), (stand_pos[0] + 15, stand_pos[1] + 15) )    
-    pygame.display.update()
-    
-    
-    
+        
+        
+        
+        #Draw objects to the frame                        
+        frame.fill((0,200,0))    
+        frame.blit(card_backs, (400,185))     
+        #frame.blit(card_images, (200, 200), (CARD_SIZE[0]*12, CARD_SIZE[1]*0, 73, 98))
+        
+        # deal_button
+        pygame.draw.rect(frame, button_blue, Rect((deal_pos),rect_end_pos))
+        # hit_button
+        pygame.draw.rect(frame, button_red, Rect(hit_pos,rect_end_pos))
+        # stand_button
+        pygame.draw.rect(frame, button_yellow, Rect(stand_pos, rect_end_pos))
+        
+        #Draw hands
+        player_hand.draw([50, 300])# test to make sure that card.draw works, replace with your code below    
+        oppo_hand.draw([50, 65])
+        
+        #Draw fonts
+        frame.blit(outcome_text.render(outcome, True, color),(175,225))
+        frame.blit(hand_count_text.render("Player Hand Count: " + str(player_hand.get_value()), True, (0,0,250)),(125,420))
+        frame.blit(hand_count_text.render("Computer Hand Count: " + str(oppo_hand.get_value()), True, (0,0,250)),(125,25))
+        
+        frame.blit(hand_count_text.render("Deal", True, (255,255,255)), (deal_pos[0] + 15, deal_pos[1] + 15) )
+        frame.blit(hand_count_text.render("Hit", True, (255,255,255)), (hit_pos[0] + 15, hit_pos[1] + 15) )
+        frame.blit(hand_count_text.render("Stand", True, (255,255,255)), (stand_pos[0] + 15, stand_pos[1] + 15) )    
+        pygame.display.update()
+        await asyncio.sleep(0)
+        
+if __name__ == "__main__":
+    asyncio.run(main())
+        
